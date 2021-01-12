@@ -1,14 +1,14 @@
 var myApi = "1ba7fe7548e5920eb3df1299e7ccc9f0";
 var todayDate = moment().format("L");
 
-function getSearch() {
+var getSearch = function() {
   event.preventDefault();
   var searchVal = document.querySelector("#search").value;
   saveCity(searchVal);
   searchWeather(searchVal);
 };
 
-function saveCity(searchVal) {
+var saveCity = function(searchVal) {
   var li = document.createElement("li");
   li.classList.add("list-group-item");
   li.textContent = searchVal;
@@ -19,7 +19,7 @@ function saveCity(searchVal) {
   history.appendChild(li);
 };
 
-function searchWeather(searchVal) {
+var searchWeather = function(searchVal) {
   fetch(`http://api.openweathermap.org/data/2.5/weather?q=${searchVal}&appid=${myApi}&units=imperial`)
     .then((response) => {
       return response.json();
@@ -62,9 +62,23 @@ function searchWeather(searchVal) {
       cardBody.appendChild(humidity);
       cardBody.appendChild(windSpeed);
 
+      var lat = cityData.coord.lat;
+      console.log('lat: ', lat);
+      var lon = cityData.coord.lon;
+      console.log('lon: ', lon);
 
-
-    })
+      getUV(lat, lon);
+    });
 }
+
+var getUV = function(lat, lon) {
+  fetch(`http://api.openweathermap.org/data/2.5/uvi?lat=${lat}&lon=${lon}&appid=${myApi}`)
+    .then((response) => {
+        return response.json();
+    }).then((UVdata) => {
+      console.log(UVdata.value);
+      return UVdata.value;
+    });
+};
 
 document.querySelector("#searchBtn").addEventListener("click", getSearch);
