@@ -1,4 +1,5 @@
 var myApi = "1ba7fe7548e5920eb3df1299e7ccc9f0";
+var todayDate = moment().format("L");
 
 function getSearch() {
   event.preventDefault();
@@ -24,6 +25,45 @@ function searchWeather(searchVal) {
       return response.json();
     }).then((cityData) => {
       console.log('City Data', cityData);
+
+      var today = document.querySelector("#today-weather");
+
+      if (today) {
+        today.innerHTML = "";
+      };
+
+      var card = document.createElement("div");
+      card.classList.add("card");
+
+      var cardBody = document.createElement("div");
+      cardBody.classList.add("card-body");
+
+      today.append(card);
+      card.appendChild(cardBody);
+
+      var title = document.createElement("h3");
+      title.classList.add("card-title");
+      title.textContent = searchVal + " " + "(" + todayDate + ")";
+
+      var temp = document.createElement("p");
+      temp.classList.add("card-text");
+      temp.textContent = "Temperature: " + cityData.main.temp + "°F";
+
+      var humidity = document.createElement("p");
+      humidity.classList.add("card-text");
+      humidity.textContent = "Humidity: " + cityData.main.humidity + "%";
+
+      var windSpeed = document.createElement("p");
+      windSpeed.classList.add("card-text");
+      windSpeed.textContent = "Wind Speed: " + cityData.wind.speed + " mph";
+
+      cardBody.appendChild(title);
+      cardBody.appendChild(temp);
+      cardBody.appendChild(humidity);
+      cardBody.appendChild(windSpeed);
+
+
+
     })
 }
 
