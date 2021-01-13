@@ -24,7 +24,7 @@ var searchWeather = function(searchVal) {
     .then((response) => {
       return response.json();
     }).then((cityData) => {
-      console.log('City Data', cityData);
+      console.log('City Data:', cityData);
 
       var today = document.querySelector("#today-weather");
 
@@ -41,9 +41,13 @@ var searchWeather = function(searchVal) {
       today.append(card);
       card.appendChild(cardBody);
 
+      var weatherIcon = cityData.weather[0].icon;
+      console.log("weather icon:", weatherIcon);
+      var iconurl = "https://openweathermap.org/img/wn/"+ weatherIcon +"@2x.png";
+
       var title = document.createElement("h3");
       title.classList.add("card-title");
-      title.textContent = searchVal + " " + "(" + todayDate + ")";
+      title.innerHTML = searchVal + " " + "(" + todayDate + ")" + "<img src=" + iconurl + ">";
 
       var temp = document.createElement("p");
       temp.classList.add("card-text");
@@ -66,8 +70,11 @@ var searchWeather = function(searchVal) {
       console.log('lat: ', lat);
       var lon = cityData.coord.lon;
       console.log('lon: ', lon);
+      
 
       getUV(lat, lon);
+
+      fiveDayForecast(searchVal);
     });
 }
 
@@ -75,9 +82,19 @@ var getUV = function(lat, lon) {
   fetch(`http://api.openweathermap.org/data/2.5/uvi?lat=${lat}&lon=${lon}&appid=${myApi}`)
     .then((response) => {
         return response.json();
-    }).then((UVdata) => {
-      console.log(UVdata.value);
-      return UVdata.value;
+    }).then((uvData) => {
+      console.log("UV Data:", uvData);
+      
+    });
+};
+
+var fiveDayForecast = function(searchVal){
+  fetch(`http://api.openweathermap.org/data/2.5/forecast?q=${searchVal}&appid=${myApi}`)
+    .then((response) => {
+        console.log(response);
+        return response.json();
+    }).then((fiveDayData) => {
+        console.log("Five-Day:", fiveDayData);
     });
 };
 
