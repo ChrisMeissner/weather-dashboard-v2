@@ -80,7 +80,7 @@ var searchWeather = function(searchVal) {
 }
 
 var getUV = function(lat, lon) {
-  fetch(`http://api.openweathermap.org/data/2.5/uvi?lat=${lat}&lon=${lon}&appid=${myApi}`)
+  fetch(`https://api.openweathermap.org/data/2.5/uvi?lat=${lat}&lon=${lon}&appid=${myApi}`)
     .then((response) => {
         return response.json();
     }).then((uvData) => {
