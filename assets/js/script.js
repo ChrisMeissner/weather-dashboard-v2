@@ -14,6 +14,7 @@ var saveCity = function(searchVal) {
   li.textContent = searchVal;
   li.onclick = function() {
       saveCity(searchVal);
+      searchWeather(searchVal);
   };
   var history = document.querySelector("#city-history");
   history.appendChild(li);
@@ -84,7 +85,6 @@ var getUV = function(lat, lon) {
         return response.json();
     }).then((uvData) => {
       console.log("UV Data:", uvData);
-      
     });
 };
 
@@ -94,7 +94,53 @@ var fiveDayForecast = function(searchVal){
         console.log(response);
         return response.json();
     }).then((fiveDayData) => {
-        console.log("Five-Day:", fiveDayData);
+      console.log("Five-Day:", fiveDayData);
+
+      var fiveDay = document.querySelector("#five-day");
+
+        if(fiveDay) {
+          fiveDay.innerHTML = "";
+        };
+
+      for (var i = 0; i < 40; i = i + 8) {
+        var fiveDate = fiveDayData.list[i].dt_txt;
+        var fiveIconCode = fiveDayData.list[i].weather[0].icon;
+        var fiveIconUrl = "https://openweathermap.org/img/wn/" + fiveIconCode + ".png";
+        var fiveTemp =  fiveDayData.list[i].main.temp
+        var fiveHumidity = fiveDayData.list[i].main.humidity;
+
+        var card = document.createElement("fiveCard");
+        card.classList.add("card");
+        card.classList.add("bg-primary");
+        card.classList.add("col-md-2");
+        card.classList.add("text-light");
+        card.setAttribute("style", "margin: 5px");
+
+        fiveDay.append(card);
+  
+        var cardBody = document.createElement("fiveCardBody");
+  
+        card.appendChild(cardBody);
+
+        var date = document.createElement("p");
+        date.classList.add("card-text");
+        date.textContent = fiveDate; 
+        cardBody.appendChild(date);
+
+        var fiveIcon = document.createElement("p");
+        fiveIcon.innerHTML = "<img src=" + fiveIconUrl + ">";
+        cardBody.appendChild(fiveIcon);
+        
+        var temp = document.createElement("p");
+        temp.classList.add("card-text");
+        temp.textContent = "Temperature: " + fiveTemp + "°F";
+        cardBody.appendChild(temp);
+
+        var humidity = document.createElement("p");
+        humidity.classList.add("card-text");
+        humidity.textContent = "Humidity: " + fiveHumidity + "%";
+        cardBody.appendChild(humidity);
+      }
     });
 };
 
