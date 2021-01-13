@@ -21,7 +21,7 @@ var saveCity = function(searchVal) {
 };
 
 var searchWeather = function(searchVal) {
-  fetch(`http://api.openweathermap.org/data/2.5/weather?q=${searchVal}&appid=${myApi}&units=imperial`)
+  fetch(`https://api.openweathermap.org/data/2.5/weather?q=${searchVal}&appid=${myApi}&units=imperial`)
     .then((response) => {
       return response.json();
     }).then((cityData) => {
