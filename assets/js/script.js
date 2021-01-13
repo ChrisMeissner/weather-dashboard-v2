@@ -85,6 +85,33 @@ var getUV = function(lat, lon) {
         return response.json();
     }).then((uvData) => {
       console.log("UV Data:", uvData);
+
+      var today = document.querySelector("#today-weather");
+      var uvCard = document.createElement("uvCard");
+      uvCard.classList.add("card");
+
+      today.append(uvCard);
+
+      var uvCardBody = document.createElement("uvCardBody");
+      uvCardBody.classList.add("card-body");
+      uvCard.appendChild(uvCardBody);
+
+      var uvIndex = uvData.value;
+
+      if (uvIndex <= 2) {
+        uvCard.classList.add("bg-success");
+      } else if (uvIndex <= 5) {
+        uvCard.classList.add("bg-warning");
+      } else {
+        uvCard.classList.add("bg-danger");
+      };
+
+      var uvValue = document.createElement("p");
+      uvValue.classList.add("card-text");
+      uvValue.classList.add("text-light");
+      uvValue.innerHTML = "UV Index: " + uvIndex;
+      uvCardBody.appendChild(uvValue);
+
     });
 };
 
@@ -104,6 +131,7 @@ var fiveDayForecast = function(searchVal){
 
       for (var i = 0; i < 40; i = i + 8) {
         var fiveDate = fiveDayData.list[i].dt_txt;
+        var futureDate = moment(fiveDate).format("L");
         var fiveIconCode = fiveDayData.list[i].weather[0].icon;
         var fiveIconUrl = "https://openweathermap.org/img/wn/" + fiveIconCode + ".png";
         var fiveTemp =  fiveDayData.list[i].main.temp
@@ -124,7 +152,7 @@ var fiveDayForecast = function(searchVal){
 
         var date = document.createElement("p");
         date.classList.add("card-text");
-        date.textContent = fiveDate; 
+        date.textContent = futureDate; 
         cardBody.appendChild(date);
 
         var fiveIcon = document.createElement("p");
@@ -133,7 +161,7 @@ var fiveDayForecast = function(searchVal){
         
         var temp = document.createElement("p");
         temp.classList.add("card-text");
-        temp.textContent = "Temperature: " + fiveTemp + "°F";
+        temp.textContent = "Temp: " + fiveTemp + "°F";
         cardBody.appendChild(temp);
 
         var humidity = document.createElement("p");
